@@ -14,8 +14,12 @@
 
 from __future__ import annotations
 
+import inspect
 from typing import Any
+from typing import Awaitable
+from typing import Callable
 from typing import TYPE_CHECKING
+from typing import Union
 
 from google.genai import types
 from pydantic import model_validator
@@ -33,6 +37,7 @@ from .tool_context import ToolContext
 
 if TYPE_CHECKING:
   from ..agents.base_agent import BaseAgent
+  from ..events.event import Event
 
 
 class AgentTool(BaseTool):
@@ -49,6 +54,8 @@ class AgentTool(BaseTool):
       to the agent's runner. When True (default), the agent will inherit all
       plugins from its parent. Set to False to run the agent with an isolated
       plugin environment.
+    event_callback: Optional callback invoked for each event emitted by the
+      child agent. Can be either a synchronous or asynchronous function.
   """
 
   def __init__(
@@ -57,9 +64,13 @@ class AgentTool(BaseTool):
       skip_summarization: bool = False,
       *,
       include_plugins: bool = True,
+      event_callback: Union[
+              Callable[[Event], None], Callable[[Event], Awaitable[None]], None
+          ] = None
   ):
     self.agent = agent
     self.skip_summarization: bool = skip_summarization
+    self.event_callback = event_callback
     self.include_plugins = include_plugins
 
     super().__init__(name=agent.name, description=agent.description)
@@ -181,6 +192,13 @@ class AgentTool(BaseTool):
           tool_context.state.update(event.actions.state_delta)
         if event.content:
           last_content = event.content
+
+        # Invoke user-provided event callback if present.
+        if self.event_callback:
+          if inspect.iscoroutinefunction(self.event_callback):
+            await self.event_callback(event)
+          else:
+            self.event_callback(event)
 
     # Clean up runner resources (especially MCP sessions)
     # to avoid "Attempted to exit cancel scope in a different task" errors
