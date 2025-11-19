@@ -195,10 +195,15 @@ class AgentTool(BaseTool):
 
         # Invoke user-provided event callback if present.
         if self.event_callback:
-          if inspect.iscoroutinefunction(self.event_callback):
-            await self.event_callback(event)
-          else:
-            self.event_callback(event)
+          try:
+            if inspect.iscoroutinefunction(self.event_callback):
+              await self.event_callback(event)
+            else:
+              self.event_callback(event)
+          except Exception as e:
+            logger.warning(
+                'Error in AgentTool event_callback: %s', e, exc_info=True
+            )
 
     # Clean up runner resources (especially MCP sessions)
     # to avoid "Attempted to exit cancel scope in a different task" errors
