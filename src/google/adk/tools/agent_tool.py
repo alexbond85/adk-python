@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import inspect
+import logging
 from typing import Any
 from typing import Awaitable
 from typing import Callable
@@ -38,6 +39,8 @@ from .tool_context import ToolContext
 if TYPE_CHECKING:
   from ..agents.base_agent import BaseAgent
   from ..events.event import Event
+
+logger = logging.getLogger('google_adk.' + __name__)
 
 
 class AgentTool(BaseTool):
