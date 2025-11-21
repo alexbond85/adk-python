@@ -55,21 +55,26 @@ Example:
 
 from __future__ import annotations
 
-from .testing_utils import append_user_content
-from .testing_utils import create_invocation_context
-from .testing_utils import create_test_agent
+from ..agents.run_config import RunConfig
+from ..events.event import Event
+from ..models.llm_request import LlmRequest
+from ..models.llm_response import LlmResponse
+from ..sessions.session import Session
 from .testing_utils import END_OF_AGENT
-from .testing_utils import get_user_content
 from .testing_utils import InMemoryRunner
 from .testing_utils import MockLlmConnection
 from .testing_utils import MockModel
 from .testing_utils import ModelContent
+from .testing_utils import TestInMemoryRunner
+from .testing_utils import UserContent
+from .testing_utils import append_user_content
+from .testing_utils import create_invocation_context
+from .testing_utils import create_test_agent
+from .testing_utils import get_user_content
 from .testing_utils import simplify_content
 from .testing_utils import simplify_contents
 from .testing_utils import simplify_events
 from .testing_utils import simplify_resumable_app_events
-from .testing_utils import TestInMemoryRunner
-from .testing_utils import UserContent
 
 __all__ = [
     'MockModel',
@@ -87,4 +92,10 @@ __all__ = [
     'UserContent',
     'ModelContent',
     'END_OF_AGENT',
+    # Commonly used types
+    'RunConfig',
+    'Event',
+    'LlmRequest',
+    'LlmResponse',
+    'Session',
 ]
