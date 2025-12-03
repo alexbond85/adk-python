@@ -19,6 +19,12 @@ at google.adk.testing. Tests should continue to import from here for now,
 but new code should import from google.adk.testing directly.
 """
 
+# Re-export commonly used types that tests access via testing_utils
+from google.adk.agents.run_config import RunConfig
+from google.adk.events.event import Event
+from google.adk.models.llm_request import LlmRequest
+from google.adk.models.llm_response import LlmResponse
+from google.adk.sessions.session import Session
 # Re-export everything from the new public testing module
 from google.adk.testing import append_user_content
 from google.adk.testing import create_invocation_context
@@ -35,13 +41,6 @@ from google.adk.testing import simplify_events
 from google.adk.testing import simplify_resumable_app_events
 from google.adk.testing import TestInMemoryRunner
 from google.adk.testing import UserContent
-
-# Re-export commonly used types that tests access via testing_utils
-from google.adk.agents.run_config import RunConfig
-from google.adk.events.event import Event
-from google.adk.models.llm_request import LlmRequest
-from google.adk.models.llm_response import LlmResponse
-from google.adk.sessions.session import Session
 
 __all__ = [
     'MockModel',
