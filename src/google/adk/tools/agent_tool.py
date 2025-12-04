@@ -68,8 +68,8 @@ class AgentTool(BaseTool):
       *,
       include_plugins: bool = True,
       event_callback: Union[
-              Callable[[Event], None], Callable[[Event], Awaitable[None]], None
-          ] = None
+          Callable[[Event], None], Callable[[Event], Awaitable[None]], None
+      ] = None,
   ):
     self.agent = agent
     self.skip_summarization: bool = skip_summarization
